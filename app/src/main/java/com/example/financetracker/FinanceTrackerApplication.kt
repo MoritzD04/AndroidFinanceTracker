@@ -1,8 +1,8 @@
-package com.example.hiltbase
+package com.example.financetracker
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class HiltBaseApplication : Application() {
+class FinanceTrackerApplication : Application() {
 }

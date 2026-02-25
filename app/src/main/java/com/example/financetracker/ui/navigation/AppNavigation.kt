@@ -1,4 +1,4 @@
-package com.example.hiltbase.ui.navigation
+package com.example.financetracker.ui.navigation
 
 
 import androidx.compose.runtime.Composable
@@ -6,7 +6,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.hiltbase.ui.view.MainView
+import com.example.financetracker.ui.view.MainView
 
 
 const val NAV_MAIN: String = "MainView"

@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.hiltbase"
+    namespace = "com.example.financetracker"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1

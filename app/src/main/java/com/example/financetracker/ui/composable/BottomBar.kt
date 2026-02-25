@@ -1,4 +1,4 @@
-package com.example.hiltbase.ui.composable
+package com.example.financetracker.ui.composable
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -12,9 +12,9 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.hiltbase.ui.navigation.NAV_MAIN
-import com.example.hiltbase.ui.navigation.NAV_SETTINGS
-import com.example.hiltbase.ui.viewmodel.NavigationViewModel
+import com.example.financetracker.ui.navigation.NAV_MAIN
+import com.example.financetracker.ui.navigation.NAV_SETTINGS
+import com.example.financetracker.ui.viewmodel.NavigationViewModel
 
 @Composable
 fun BottomBar(

@@ -1,4 +1,4 @@
-package com.example.hiltbase
+package com.example.financetracker
 
 import org.junit.Test
 
