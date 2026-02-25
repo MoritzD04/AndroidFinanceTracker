@@ -14,7 +14,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.hiltbase"
+        applicationId = "com.example.financetracker"
         minSdk = 35
         targetSdk = 36
         versionCode = 1
