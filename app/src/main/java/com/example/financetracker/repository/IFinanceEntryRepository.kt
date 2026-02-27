@@ -34,9 +34,15 @@ class TestFinanceEntryRepository : IFinanceEntryRepository {
 
     override fun postEntry(entry: FinanceEntry) {
         _entries.update { current ->
-            current + entry
+            if(!current.any { it.id == entry.id }){
+                logger.info("Added Entry $entry")
+                current + entry
+            } else {
+                logger.warn("Entry $entry not added. Element already added.")
+                current
+            }
         }
-        logger.info("Added Entry $entry")
+
     }
 
     override fun patchEntry(entry: FinanceEntry) {
