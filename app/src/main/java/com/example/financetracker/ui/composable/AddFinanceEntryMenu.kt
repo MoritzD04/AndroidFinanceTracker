@@ -11,11 +11,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.example.financetracker.model.FinanceEntry
 import com.example.financetracker.util.convertToCents
+import java.time.LocalDate
 
 @Composable
 fun AddFinanceEntryMenu(onClick: (FinanceEntry) -> Unit) {
     var name by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
+    val selectedDate = remember { mutableStateOf<LocalDate>(LocalDate.now()) }
     var amountText by remember { mutableStateOf("0.00") }
     Column {
         Text("Add Entry")
@@ -25,23 +26,22 @@ fun AddFinanceEntryMenu(onClick: (FinanceEntry) -> Unit) {
             label = { Text("Type") },
             singleLine = true
         )
-        TextField(
-            value = description,
-            onValueChange = { description = it },
-            label = { Text("Description (optional)") })
+        DatePickerTextField(selectedDate)
         EuroTextField(value = amountText, onValueChange = { amountText = it })
         Button(onClick = {
             onClick(
                 FinanceEntry(
                     name = name,
-                    description = description,
+                    date = selectedDate.value,
                     value = convertToCents(amountText)
                 )
             )
+            // reset values
             name = ""
-            description = ""
+            selectedDate.value = LocalDate.now()
             amountText = "0.00"
         }) { Text("Add") }
     }
 
 }
+
