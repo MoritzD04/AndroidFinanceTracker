@@ -1,13 +1,20 @@
 package com.example.financetracker.ui.view
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,21 +23,31 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.financetracker.ui.composable.AddFinanceEntryMenu
 import com.example.financetracker.ui.composable.BottomBar
 import com.example.financetracker.ui.composable.FinanceEntryCard
+import com.example.financetracker.ui.composable.SimpleDialog
 import com.example.financetracker.ui.viewmodel.MainViewModel
-import com.example.financetracker.util.convertToCents
 
 
 @Composable
 fun MainView(navController: NavHostController) {
     val viewModel: MainViewModel = hiltViewModel()
     val entries by viewModel.entries.collectAsState()
-    var renderAddWindow by remember { mutableStateOf(false) }
+    val openAddEntryDialog = remember { mutableStateOf(false) }
+    when {
+        openAddEntryDialog.value -> SimpleDialog({ openAddEntryDialog.value = false }) {
+            AddFinanceEntryMenu {
+                viewModel.addEntry(it)
+                openAddEntryDialog.value = false
+            }
+        }
+    }
     Scaffold(
         bottomBar = { BottomBar(navController) }
     ) {
@@ -51,15 +68,16 @@ fun MainView(navController: NavHostController) {
                         )
                     }
                 }
-                if(renderAddWindow) {
-                    AddFinanceEntryMenu {
-                        viewModel.addEntry(it)
-                        renderAddWindow = false
-                    }
-                } else {
-                    Button(onClick = {renderAddWindow = true}) { Text("Add Entry") }
-                }
             }
+            Button(
+                onClick = { openAddEntryDialog.value = true },
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .size(64.dp)
+                    .padding(4.dp),
+                shape = CircleShape,
+                contentPadding = PaddingValues(0.dp)
+            ) { Icon(Icons.Filled.Add, contentDescription = null, modifier = Modifier.size(48.dp)) }
         }
     }
 }
