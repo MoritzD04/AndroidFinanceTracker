@@ -1,7 +1,8 @@
 package com.example.financetracker.model
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.example.financetracker.R
+import com.example.financetracker.util.FINANCE_ENTRY_1
+import com.example.financetracker.util.FINANCE_ENTRY_2
 import java.util.UUID
 
 data class FinanceEntry(
@@ -12,19 +13,9 @@ data class FinanceEntry(
     var image: Int
 )
 
-class FinanceEntryPreviewParameterProvider: PreviewParameterProvider<FinanceEntry> {
-    override val values = sequenceOf(FinanceEntry(
-        id = "0",
-        name = "Rewe",
-        description = "Einkauf",
-        value = 30.04f,
-        image = R.drawable.ic_launcher_foreground
-        ),
-        FinanceEntry(
-            id = "1",
-            name = "Edeka",
-            description = "Einkauf",
-            value = 21.01f,
-            image = R.drawable.ic_launcher_foreground
-    ))
+class FinanceEntryPreviewParameterProvider : PreviewParameterProvider<FinanceEntry> {
+    override val values = sequenceOf(
+        FINANCE_ENTRY_1,
+        FINANCE_ENTRY_2
+    )
 }

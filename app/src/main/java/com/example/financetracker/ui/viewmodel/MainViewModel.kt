@@ -2,12 +2,12 @@ package com.example.financetracker.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.financetracker.R
 import com.example.financetracker.behavior.command.AddFinanceEntryCommand
 import com.example.financetracker.behavior.command.Invoker
 import com.example.financetracker.behavior.command.RemoveFinanceEntryCommand
 import com.example.financetracker.model.FinanceEntry
 import com.example.financetracker.repository.IFinanceEntryRepository
+import com.example.financetracker.util.FINANCE_ENTRY_1
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -29,14 +29,12 @@ class MainViewModel @Inject constructor(
             )
 
     init {
-        val cmd1 = AddFinanceEntryCommand(financeEntryRepo, FinanceEntry(
-            name = "Rewe",
-            description = "Einkauf",
-            value = 30.04f,
-            image = R.drawable.ic_launcher_foreground
-        ))
+        val cmd1 = AddFinanceEntryCommand(financeEntryRepo, FINANCE_ENTRY_1)
         invoker.execute(cmd1)
     }
 
+    // wrap in viewmodelscope if repo is async
     fun deleteEntry(entry: FinanceEntry) = invoker.execute(RemoveFinanceEntryCommand(financeEntryRepo, entry))
+
+    fun addEntry(entry: FinanceEntry) = invoker.execute(AddFinanceEntryCommand(financeEntryRepo, entry))
 }
