@@ -2,6 +2,7 @@ package com.example.financetracker.repository
 
 import android.util.Log
 import com.example.financetracker.model.FinanceEntry
+import com.example.financetracker.util.Logger
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -20,9 +21,10 @@ interface IFinanceEntryRepository {
 
     fun deleteEntry(id: String)
 }
+
 @Singleton
 class TestFinanceEntryRepository : IFinanceEntryRepository {
-
+    private val logger = Logger(this.javaClass)
     private val _entries = MutableStateFlow<List<FinanceEntry>>(emptyList())
 
     override fun getEntries(): StateFlow<List<FinanceEntry>> = _entries
@@ -34,28 +36,36 @@ class TestFinanceEntryRepository : IFinanceEntryRepository {
         _entries.update { current ->
             current + entry
         }
-        Log.i("FinanceRepo", "Added Entry $entry")
+        logger.info("Added Entry $entry")
     }
 
     override fun patchEntry(entry: FinanceEntry) {
+        var success = false
         _entries.update { current ->
             current.map {
                 if (it.id == entry.id) {
-                    Log.i("FinanceRepo", "Updated Entry $current to $entry")
+                    logger.info("Updated Entry $current to $entry")
+                    success = true
                     entry
                 } else {
-                    Log.i("FinanceRepo", "Updating not Possible. No current value for $entry")
                     it
                 }
             }
         }
+        if (!success) logger.warn("Updating not Possible. No current value for $entry")
     }
 
     override fun deleteEntry(id: String) {
+        var deleted = false
         _entries.update { current ->
-            current.filterNot { it.id == id }
+            current.filterNot {
+                if (it.id == id) {
+                    deleted = true
+                    true
+                } else false
+            }
         }
-        Log.i("FinanceRepo", "Deleted Entry $id")
+        if (deleted) logger.info("Deleted Entry $id") else logger.warn("Deleting not possible. No entry with id $id found.")
     }
 }
 
