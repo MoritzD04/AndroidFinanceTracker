@@ -51,12 +51,13 @@ fun MainView(navController: NavHostController) {
                         )
                     }
                 }
-                Button(onClick = {renderAddWindow = true}) { Text("Add Entry") }
                 if(renderAddWindow) {
                     AddFinanceEntryMenu {
                         viewModel.addEntry(it)
                         renderAddWindow = false
                     }
+                } else {
+                    Button(onClick = {renderAddWindow = true}) { Text("Add Entry") }
                 }
             }
         }
