@@ -3,6 +3,7 @@ package com.example.financetracker.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.financetracker.behavior.command.AddFinanceEntryCommand
+import com.example.financetracker.behavior.command.EditFinanceEntryCommand
 import com.example.financetracker.behavior.command.Invoker
 import com.example.financetracker.behavior.command.RemoveFinanceEntryCommand
 import com.example.financetracker.model.FinanceEntry
@@ -39,6 +40,8 @@ class MainViewModel @Inject constructor(
 
     // wrap in viewmodelscope if repo is async
     fun deleteEntry(entry: FinanceEntry) = invoker.execute(RemoveFinanceEntryCommand(financeEntryRepo, entry))
+
+    fun updateEntry(entry: FinanceEntry) = invoker.execute(EditFinanceEntryCommand(financeEntryRepo, entry))
 
     fun addEntry(entry: FinanceEntry) = invoker.execute(AddFinanceEntryCommand(financeEntryRepo, entry))
 }

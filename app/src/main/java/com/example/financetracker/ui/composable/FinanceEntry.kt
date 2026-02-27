@@ -61,7 +61,7 @@ fun FinanceEntryCard(
             Text(text = entry.date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")), fontSize = 11.sp)
         }
 
-        Text(text = entry.value.asEuroString(), fontSize = 16.sp, textAlign = TextAlign.End)
+        Text(text = "${entry.value.asEuroString()}€", fontSize = 16.sp, textAlign = TextAlign.End)
         IconButton(onClick = onEditClick) {
             Icon(Icons.Filled.Edit, contentDescription = null)
         }

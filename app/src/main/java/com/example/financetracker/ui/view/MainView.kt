@@ -24,7 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.financetracker.ui.composable.AddFinanceEntryMenu
+import com.example.financetracker.model.FinanceEntry
+import com.example.financetracker.ui.composable.AddOrEditFinanceEntryMenu
 import com.example.financetracker.ui.composable.BottomBar
 import com.example.financetracker.ui.composable.FinanceEntryCard
 import com.example.financetracker.ui.composable.SimpleDialog
@@ -36,13 +37,23 @@ fun MainView(navController: NavHostController) {
     val viewModel: MainViewModel = hiltViewModel()
     val entries by viewModel.entries.collectAsState()
     val openAddEntryDialog = remember { mutableStateOf(false) }
+    val currentEditing = remember { mutableStateOf<FinanceEntry?>(null) }
     when {
         openAddEntryDialog.value -> SimpleDialog({ openAddEntryDialog.value = false }) {
-            AddFinanceEntryMenu {
+            AddOrEditFinanceEntryMenu(onAdd = {
                 viewModel.addEntry(it)
                 openAddEntryDialog.value = false
+            })
+        }
+        currentEditing.value != null -> {
+            SimpleDialog({ openAddEntryDialog.value = false }) {
+                AddOrEditFinanceEntryMenu(currentEditing, onEditFinish = {
+                    currentEditing.value = null
+                    viewModel.updateEntry(it)
+                })
             }
         }
+
     }
     Scaffold(
         bottomBar = { BottomBar(navController) }
@@ -66,7 +77,8 @@ fun MainView(navController: NavHostController) {
                 ) { entry ->
                     FinanceEntryCard(
                         entry = entry,
-                        onDeleteClick = { viewModel.deleteEntry(entry) }
+                        onDeleteClick = { viewModel.deleteEntry(entry) },
+                        onEditClick = {currentEditing.value = entry}
                     )
                 }
             }
