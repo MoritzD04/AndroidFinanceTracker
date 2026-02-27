@@ -61,7 +61,7 @@ fun FinanceEntryCard(
             Text(text = entry.description, fontSize = 11.sp)
         }
 
-        Text(text = "${entry.value}€", fontSize = 16.sp, textAlign = TextAlign.End)
+        Text(text = "${entry.value.toString().dropLast(2)}.${entry.value.toString().takeLast(2)}€", fontSize = 16.sp, textAlign = TextAlign.End)
         IconButton(onClick = onEditClick) {
             Icon(Icons.Filled.Edit, contentDescription = null)
         }
