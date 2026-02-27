@@ -30,8 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.financetracker.model.FinanceEntry
 import com.example.financetracker.model.FinanceEntryPreviewParameterProvider
-import com.example.financetracker.repository.IFinanceEntryRepository
-import com.example.financetracker.ui.viewmodel.MainViewModel
+import com.example.financetracker.util.asEuroString
 
 @Preview
 @Composable
@@ -61,7 +60,7 @@ fun FinanceEntryCard(
             Text(text = entry.description, fontSize = 11.sp)
         }
 
-        Text(text = "${entry.value.toString().dropLast(2)}.${entry.value.toString().takeLast(2)}€", fontSize = 16.sp, textAlign = TextAlign.End)
+        Text(text = entry.value.asEuroString(), fontSize = 16.sp, textAlign = TextAlign.End)
         IconButton(onClick = onEditClick) {
             Icon(Icons.Filled.Edit, contentDescription = null)
         }
