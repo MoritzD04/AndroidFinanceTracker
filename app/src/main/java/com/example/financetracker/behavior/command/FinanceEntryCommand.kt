@@ -5,7 +5,7 @@ import com.example.financetracker.repository.IFinanceEntryRepository
 
 class AddFinanceEntryCommand(val repo: IFinanceEntryRepository, val entry: FinanceEntry): ICommand {
     override fun execute() {
-        repo.postEntry(entry)
+        repo.postEntry(entry.listId, entry)
     }
 
     override fun undo() {
@@ -21,14 +21,14 @@ class RemoveFinanceEntryCommand(val repo: IFinanceEntryRepository, val entry: Fi
     }
 
     override fun undo() {
-        repo.postEntry(oldValue!!)
+        repo.postEntry(entry.listId, oldValue!!)
     }
 }
 
 class EditFinanceEntryCommand(val repo: IFinanceEntryRepository, val entry: FinanceEntry): ICommand {
     var oldValue: FinanceEntry? = null
     override fun execute() {
-        oldValue = repo.getEntry(entry.id)
+        oldValue = repo.getEntry(entry.listId, entry.id)
         repo.patchEntry(entry)
     }
 

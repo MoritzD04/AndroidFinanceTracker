@@ -7,12 +7,21 @@ import com.example.financetracker.behavior.command.EditFinanceEntryCommand
 import com.example.financetracker.behavior.command.Invoker
 import com.example.financetracker.behavior.command.RemoveFinanceEntryCommand
 import com.example.financetracker.model.FinanceEntry
+import com.example.financetracker.model.FinanceList
 import com.example.financetracker.repository.IFinanceEntryRepository
 import com.example.financetracker.util.FINANCE_ENTRY_1
+import com.example.financetracker.util.FINANCE_ENTRY_2
+import com.example.financetracker.util.FINANCE_LIST_1
+import com.example.financetracker.util.FINANCE_LIST_2
 import com.example.financetracker.util.generateExampleFinanceEntries
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
@@ -22,8 +31,8 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
     val invoker = Invoker()
 
-    val entries: StateFlow<List<FinanceEntry>> =
-        financeEntryRepo.getEntries()
+    val lists: StateFlow<List<FinanceList>> =
+        financeEntryRepo.getFinanceLists()
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000),
@@ -31,6 +40,8 @@ class MainViewModel @Inject constructor(
             )
 
     init {
+        financeEntryRepo.postFinanceList(FINANCE_LIST_1)
+        financeEntryRepo.postFinanceList(FINANCE_LIST_2)
         val cmd1 = AddFinanceEntryCommand(financeEntryRepo, FINANCE_ENTRY_1)
         invoker.execute(cmd1)
         generateExampleFinanceEntries(20).forEach {
@@ -39,6 +50,10 @@ class MainViewModel @Inject constructor(
     }
 
     // wrap in viewmodelscope if repo is async
+    fun getEntries(listId: String) = financeEntryRepo.getEntries(listId).stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList())
     fun deleteEntry(entry: FinanceEntry) = invoker.execute(RemoveFinanceEntryCommand(financeEntryRepo, entry))
 
     fun updateEntry(entry: FinanceEntry) = invoker.execute(EditFinanceEntryCommand(financeEntryRepo, entry))

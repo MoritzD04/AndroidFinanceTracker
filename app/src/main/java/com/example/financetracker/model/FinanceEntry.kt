@@ -8,6 +8,7 @@ import java.time.Instant
 import java.util.UUID
 
 data class FinanceEntry(
+    val listId: String = "0",
     val id: String = UUID.randomUUID().toString(),
     var name: String = "",
     var value: Int = 0,

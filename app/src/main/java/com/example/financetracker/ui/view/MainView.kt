@@ -1,6 +1,7 @@
 package com.example.financetracker.ui.view
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,6 +15,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -30,12 +32,13 @@ import com.example.financetracker.ui.composable.BottomBar
 import com.example.financetracker.ui.composable.FinanceEntryCard
 import com.example.financetracker.ui.composable.SimpleDialog
 import com.example.financetracker.ui.viewmodel.MainViewModel
+import kotlinx.coroutines.flow.forEach
 
 
 @Composable
 fun MainView(navController: NavHostController) {
     val viewModel: MainViewModel = hiltViewModel()
-    val entries by viewModel.entries.collectAsState()
+    val lists by viewModel.lists.collectAsState()
     val openAddEntryDialog = remember { mutableStateOf(false) }
     val currentEditing = remember { mutableStateOf<FinanceEntry?>(null) }
     when {
@@ -72,14 +75,19 @@ fun MainView(navController: NavHostController) {
                 state = state
             ) {
                 items(
-                    items = entries,
+                    items = lists,
                     key = { it.id }
-                ) { entry ->
-                    FinanceEntryCard(
-                        entry = entry,
-                        onDeleteClick = { viewModel.deleteEntry(entry) },
-                        onEditClick = {currentEditing.value = entry}
-                    )
+                ) { list ->
+                    Text(list.name)
+                    Column {
+                        viewModel.getEntries(list.id).collectAsState().value.forEach {  entry ->
+                            FinanceEntryCard(
+                                entry = entry,
+                                onDeleteClick = { viewModel.deleteEntry(entry) },
+                                onEditClick = { currentEditing.value = entry }
+                            )
+                        }
+                    }
                 }
             }
 
