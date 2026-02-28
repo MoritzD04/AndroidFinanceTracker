@@ -13,12 +13,13 @@ import androidx.compose.runtime.setValue
 import com.example.financetracker.model.FinanceEntry
 import com.example.financetracker.util.asEuroString
 import com.example.financetracker.util.convertToCents
+import java.time.Instant
 import java.time.LocalDate
 
 @Composable
 fun AddOrEditFinanceEntryMenu(editing: MutableState<FinanceEntry?>? = null, onEditFinish: (FinanceEntry) -> Unit = {}, onAdd: (FinanceEntry) -> Unit = {}) {
     var name by remember { mutableStateOf(editing?.value?.name ?: "") }
-    val selectedDate = remember { mutableStateOf<LocalDate>(editing?.value?.date ?: LocalDate.now()) }
+    val selectedDate = remember { mutableStateOf<Instant>(editing?.value?.date ?: Instant.now()) }
     var amountText by remember { mutableStateOf(editing?.value?.value?.asEuroString() ?: "0.00") }
     Column {
         Text("Add Entry")
@@ -36,15 +37,16 @@ fun AddOrEditFinanceEntryMenu(editing: MutableState<FinanceEntry?>? = null, onEd
                 date = selectedDate.value,
                 value = convertToCents(amountText)
             ))
-            onEditFinish(FinanceEntry(
-                id = editing!!.value!!.id,
+            editing?.let { onEditFinish(FinanceEntry(
+                id = it.value!!.id,
                 name = name,
                 date = selectedDate.value,
                 value = convertToCents(amountText)
-            ))
+            )) }
+
             // reset values
             name = ""
-            selectedDate.value = LocalDate.now()
+            selectedDate.value = Instant.now()
             amountText = "0.00"
         }) { Text("Add") }
     }

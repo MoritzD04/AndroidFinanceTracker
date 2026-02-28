@@ -1,6 +1,5 @@
 package com.example.financetracker.repository
 
-import android.util.Log
 import com.example.financetracker.model.FinanceEntry
 import com.example.financetracker.util.Logger
 import kotlinx.coroutines.flow.MutableStateFlow

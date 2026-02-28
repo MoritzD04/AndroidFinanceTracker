@@ -30,8 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.financetracker.model.FinanceEntry
 import com.example.financetracker.model.FinanceEntryPreviewParameterProvider
+import com.example.financetracker.util.DD_MM_YYYY_FORMATTER
 import com.example.financetracker.util.asEuroString
-import java.time.format.DateTimeFormatter
 
 @Preview
 @Composable
@@ -58,7 +58,7 @@ fun FinanceEntryCard(
         Spacer(modifier = Modifier.width(2.dp))
         Column(modifier = Modifier.fillMaxHeight().weight(1f), horizontalAlignment = Alignment.Start) {
             Text(text = entry.name, fontSize = 18.sp)
-            Text(text = entry.date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")), fontSize = 11.sp)
+            Text(text = DD_MM_YYYY_FORMATTER.format(entry.date), fontSize = 11.sp)
         }
 
         Text(text = "${entry.value.asEuroString()}€", fontSize = 16.sp, textAlign = TextAlign.End)
